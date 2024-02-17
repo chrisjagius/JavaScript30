@@ -89,6 +89,8 @@
       const CLOCK_MINUTES = 60;
       const CLOCK_HOURS = 12;
       const CIRCLE_DEGREES = 360;
+      const DEGREES_PER_MINUTE = CIRCLE_DEGREES / CLOCK_MINUTES;
+      const DEGREES_PER_HOUR = CIRCLE_DEGREES / CLOCK_HOURS;
       const hourHand = document.getElementById("hour-hand");
       const minuteHand = document.getElementById("min-hand");
       const secondHand = document.getElementById("second-hand");
@@ -98,16 +100,22 @@
         const seconds = now.getSeconds();
         const minutes = now.getMinutes();
         const hours = now.getHours();
-        const secondDegrees =
-          DEGREE_OFFSET + (seconds / CLOCK_SECONDS) * CIRCLE_DEGREES;
-        const minuteDegrees =
-          DEGREE_OFFSET + (minutes / CLOCK_MINUTES) * CIRCLE_DEGREES;
-        const hourDegrees =
-          DEGREE_OFFSET + (hours / CLOCK_HOURS) * CIRCLE_DEGREES;
 
-        secondHand.style.transform = `rotate(${secondDegrees}deg)`;
-        minuteHand.style.transform = `rotate(${minuteDegrees}deg)`;
-        hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+        const secondDegrees = (seconds / CLOCK_SECONDS) * CIRCLE_DEGREES;
+        const minuteDegrees =
+          (seconds / CLOCK_SECONDS) * DEGREES_PER_MINUTE +
+          (minutes / CLOCK_MINUTES) * CIRCLE_DEGREES;
+        const hourDegrees =
+          (minutes / CLOCK_MINUTES) * DEGREES_PER_HOUR +
+          (hours / CLOCK_HOURS) * CIRCLE_DEGREES;
+
+        secondHand.style.transform = `rotate(${
+          DEGREE_OFFSET + secondDegrees
+        }deg)`;
+        minuteHand.style.transform = `rotate(${
+          DEGREE_OFFSET + minuteDegrees
+        }deg)`;
+        hourHand.style.transform = `rotate(${DEGREE_OFFSET + hourDegrees}deg)`;
         window.requestAnimationFrame(animateClockHands);
       }
 
